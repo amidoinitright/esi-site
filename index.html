@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electronic Supply International — Software tools &amp; games</title>
+<meta name="description" content="Electronic Supply International LLC is an independent software company building tools and games for Windows, Android, and PC storefronts. Pay-once pricing, not subscriptions.">
+<link rel="canonical" href="https://electronicsupplyinternational.com/">
+<meta name="theme-color" content="#0A0A0F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%237E3FF2'/%3E%3Cpath d='M12 38h9l5.5-16 9 24 5.5-13h11' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>
+/* Apply stored theme before first paint to avoid a flash. */
+try{var t=localStorage.getItem('esi-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}
+</script>
+<style>
+/* ---------- tokens: dark (default) ---------- */
+:root{
+  color-scheme:dark;
+  --bg:#0A0A0F; --bg2:#14141B;
+  --text:#ECECF1; --muted:#A3A3B0; --faint:#71717E;
+  --border:#232330; --border-strong:#31313F;
+  --p-deep:#5E2BB8; --p:#7E3FF2; --p-light:#9D6BF5; --p-soft:#BC98F8; --p-tint:#E4D6FC;
+  --accent-text:#9D6BF5; --accent-hover:#BC98F8;
+  --badge-bg:rgba(126,63,242,.12); --badge-border:rgba(126,63,242,.38); --badge-text:#BC98F8;
+  --glow:rgba(126,63,242,.15); --glow2:rgba(126,63,242,.07);
+  --btn-hover:rgba(126,63,242,.12);
+  --header-bg:rgba(10,10,15,.78);
+  --term-bg:#0C0C13; --band:rgba(20,20,27,.55); --noise-op:.08;
+  --shadow:0 14px 34px rgba(0,0,0,.45);
+  --shadow-strong:0 18px 44px rgba(0,0,0,.55),0 0 0 1px rgba(126,63,242,.14);
+  --grid-line:rgba(236,236,241,.024);
+}
+/* ---------- tokens: light (system preference, no manual override) ---------- */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme:light;
+    --bg:#FFFFFF; --bg2:#F7F5FB;
+    --text:#111118; --muted:#565662; --faint:#8B8B97;
+    --border:#E8E5F1; --border-strong:#D9D4E7;
+    --accent-text:#5E2BB8; --accent-hover:#7E3FF2;
+    --badge-bg:#EFE6FD; --badge-border:rgba(94,43,184,.35); --badge-text:#5E2BB8;
+    --glow:rgba(126,63,242,.10); --glow2:rgba(126,63,242,.05);
+    --btn-hover:rgba(126,63,242,.07);
+    --header-bg:rgba(255,255,255,.82);
+    --term-bg:#FFFFFF; --band:rgba(247,245,251,.75); --noise-op:0;
+    --shadow:0 14px 34px rgba(94,43,184,.10);
+    --shadow-strong:0 18px 44px rgba(94,43,184,.16),0 0 0 1px rgba(126,63,242,.12);
+    --grid-line:transparent;
+  }
+}
+/* ---------- tokens: light (manual override) ---------- */
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#FFFFFF; --bg2:#F7F5FB;
+  --text:#111118; --muted:#565662; --faint:#8B8B97;
+  --border:#E8E5F1; --border-strong:#D9D4E7;
+  --accent-text:#5E2BB8; --accent-hover:#7E3FF2;
+  --badge-bg:#EFE6FD; --badge-border:rgba(94,43,184,.35); --badge-text:#5E2BB8;
+  --glow:rgba(126,63,242,.10); --glow2:rgba(126,63,242,.05);
+  --btn-hover:rgba(126,63,242,.07);
+  --header-bg:rgba(255,255,255,.82);
+  --term-bg:#FFFFFF; --band:rgba(247,245,251,.75); --noise-op:0;
+  --shadow:0 14px 34px rgba(94,43,184,.10);
+  --shadow-strong:0 18px 44px rgba(94,43,184,.16),0 0 0 1px rgba(126,63,242,.12);
+  --grid-line:transparent;
+}
+
+/* ---------- base ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--text);
+  background:
+    linear-gradient(var(--grid-line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-line) 1px,transparent 1px),
+    radial-gradient(1100px 700px at 78% -220px,var(--bg2),var(--bg));
+  background-size:56px 56px,56px 56px,auto;
+  background-attachment:fixed;
+  background-color:var(--bg);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent-text);text-decoration:none}
+/* film-grain noise, dark mode only (--noise-op is 0 in light) */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--noise-op);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E")}
+a:hover{color:var(--accent-hover)}
+::selection{background:rgba(126,63,242,.32)}
+:focus-visible{outline:2px solid var(--p);outline-offset:2px;border-radius:4px}
+.container{max-width:1060px;margin:0 auto;padding:0 28px}
+/* rules fade to transparent at their ends */
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--border) 48px,var(--border) calc(100% - 48px),transparent)}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:10;background:var(--header-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+header::after{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,var(--border) 48px,var(--border) calc(100% - 48px),transparent)}
+.header-in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:62px}
+.brand{display:flex;align-items:center;gap:11px;color:var(--text);font-size:15px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+.brand:hover{color:var(--text)}
+.mark{width:30px;height:30px;flex:none;border-radius:8px;background:var(--badge-bg);border:1px solid var(--badge-border);display:grid;place-items:center;color:var(--accent-text)}
+.hnav{display:flex;align-items:center;gap:6px}
+.hnav a{color:var(--muted);font-size:14px;font-weight:500;padding:9px 12px;border-radius:7px}
+.hnav a:hover{color:var(--text);background:var(--btn-hover)}
+.toggle{width:40px;height:40px;flex:none;display:grid;place-items:center;background:transparent;border:1px solid var(--border-strong);border-radius:8px;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+.toggle:hover{border-color:var(--p);color:var(--text);background:var(--btn-hover)}
+.icon-moon{display:none}
+@media (prefers-color-scheme: light){
+  html:not([data-theme="dark"]) .icon-sun{display:none}
+  html:not([data-theme="dark"]) .icon-moon{display:block}
+}
+html[data-theme="light"] .icon-sun{display:none}
+html[data-theme="light"] .icon-moon{display:block}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:110px 0 96px}
+.hero::before{content:"";position:absolute;top:-260px;right:-140px;width:760px;height:760px;border-radius:50%;background:radial-gradient(closest-side,var(--glow),transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;bottom:-180px;left:-220px;width:560px;height:560px;border-radius:50%;background:radial-gradient(closest-side,var(--glow2),transparent 70%);pointer-events:none}
+.hero .container{position:relative}
+.kicker{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.kicker::before{content:"";width:26px;height:2px;flex:none;background:var(--p);border-radius:1px}
+h1{font-size:clamp(30px,4.4vw,48px);font-weight:600;letter-spacing:-.025em;line-height:1.08;margin:20px 0 22px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent-text)}
+.tagline{font-size:clamp(15.5px,2vw,18px);line-height:1.65;color:var(--muted);max-width:600px;text-wrap:pretty}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+
+/* ---------- principles strip ---------- */
+.principles{position:relative;padding:0 0 96px}
+.principles .kicker{margin-bottom:20px}
+.pstrip{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid transparent;border-image:linear-gradient(90deg,transparent,var(--border) 48px,var(--border) calc(100% - 48px),transparent) 1}
+.pitem{display:flex;gap:14px;padding:26px 26px 26px 0;align-items:flex-start}
+.pitem + .pitem{padding-left:26px;border-left:1px solid transparent;border-image:linear-gradient(transparent,var(--border) 30%,var(--border) 70%,transparent) 1}
+.picon{width:36px;height:36px;flex:none;border-radius:9px;background:var(--badge-bg);border:1px solid var(--badge-border);display:grid;place-items:center;color:var(--accent-text)}
+.pitem h3{font-size:14.5px;font-weight:600;letter-spacing:-.005em}
+.pitem p{font-size:13.5px;line-height:1.55;color:var(--muted);margin-top:3px;text-wrap:pretty}
+
+/* ---------- buttons: outlined, never filled ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 20px;border:1px solid var(--p);border-radius:8px;background:transparent;color:var(--accent-text);font-size:14.5px;font-weight:500;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.btn:hover{background:var(--btn-hover);border-color:var(--p-light);color:var(--accent-hover)}
+.btn:active{background:rgba(126,63,242,.2)}
+.btn-ghost{border-color:var(--border-strong);color:var(--text)}
+.btn-ghost:hover{border-color:var(--faint);color:var(--text);background:var(--btn-hover)}
+
+/* ---------- sections ---------- */
+.section{padding:0 0 112px}
+.sec-head{padding:76px 0 42px}
+#products{position:relative}
+#products::before{content:"";position:absolute;top:60px;left:-200px;width:560px;height:560px;border-radius:50%;background:radial-gradient(closest-side,var(--glow2),transparent 70%);pointer-events:none}
+.band{background:linear-gradient(180deg,transparent,var(--band) 22%,var(--band) 78%,transparent)}
+h2{font-size:27px;font-weight:600;letter-spacing:-.015em}
+.sec-head .kicker{margin-bottom:16px}
+
+/* ---------- product cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card.card-featured{grid-column:1/-1;display:grid;grid-template-columns:1.02fr .98fr;gap:32px;align-items:stretch}
+.cf-main{display:flex;flex-direction:column;gap:12px;min-width:0}
+.twall{min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;background:var(--term-bg);border:1px solid var(--border);border-radius:8px;padding:20px 22px;display:flex;flex-direction:column}
+.twall-head{font-size:12.5px;letter-spacing:.02em;color:var(--badge-text);padding-bottom:13px;border-bottom:1px solid var(--border)}
+.twall-grid{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:9px 18px;font-size:12px;line-height:1.45;color:var(--muted);margin-top:15px}
+.twall-grid li{display:flex;gap:8px;min-width:0}
+.twall-grid li::before{content:"›";color:var(--accent-text);flex:none}
+.twall-more{margin-top:auto;padding-top:15px;font-size:11.5px;color:var(--faint)}
+.card{position:relative;display:flex;flex-direction:column;gap:12px;padding:26px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;transition:border-color .2s,transform .2s,box-shadow .2s;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;background:radial-gradient(320px 130px at 28px -30px,var(--glow2),transparent 75%);opacity:0;transition:opacity .2s;pointer-events:none}
+.card:hover{border-color:var(--badge-border);transform:translateY(-3px);box-shadow:var(--shadow-strong)}
+.card:hover::before{opacity:1}
+.cicon{width:40px;height:40px;border-radius:10px;background:var(--badge-bg);border:1px solid var(--badge-border);display:grid;place-items:center;color:var(--accent-text);margin-bottom:4px}
+.card-kicker{font-size:11px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+.card h3{font-size:19px;font-weight:600;letter-spacing:-.01em}
+.card p{font-size:14.5px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.feat{list-style:none;display:grid;gap:7px;font-size:13.5px;color:var(--muted)}
+.feat li{display:flex;gap:9px;align-items:baseline}
+.feat li::before{content:"";width:4px;height:4px;flex:none;border-radius:50%;background:var(--p);transform:translateY(-2px)}
+.badge{display:inline-flex;align-items:center;gap:7px;width:fit-content;margin-top:auto;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:500;background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--badge-text)}
+.badge::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.card-lab{background:transparent;border-style:dashed;border-color:var(--border-strong)}
+.card-lab:hover{box-shadow:none;transform:none;border-color:var(--badge-border)}
+
+/* ---------- about ---------- */
+.about-lede{font-size:clamp(16px,1.9vw,18px);line-height:1.7;color:var(--muted);max-width:640px;text-wrap:pretty}
+
+/* ---------- contact ---------- */
+.contact-card{position:relative;overflow:hidden;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:36px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px}
+.contact-card::before{content:"";position:absolute;top:-160px;right:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(closest-side,var(--glow2),transparent 70%);pointer-events:none}
+.c-name{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.c-purpose{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:10px;color:var(--muted);font-size:14px}
+.c-purpose span{display:inline-flex;align-items:center;gap:10px}
+.c-purpose span + span::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.c-note{color:var(--faint);font-size:13.5px;margin-top:14px;text-wrap:pretty}
+.c-right{position:relative;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.btn-mail{word-break:break-all}
+
+/* ---------- footer ---------- */
+footer{padding:26px 0 44px;color:var(--faint);font-size:13px}
+footer .container{padding-top:26px}
+
+/* ---------- responsive ---------- */
+@media (max-width:880px){
+  .grid{grid-template-columns:1fr}
+  .card.card-featured{grid-template-columns:1fr;gap:22px}
+  .hero{padding:76px 0 72px}
+  .principles{padding-bottom:76px}
+  .pstrip{grid-template-columns:1fr}
+  .pitem{padding:18px 0}
+  .pitem + .pitem{padding-left:0;border-left:none;border-top:1px solid transparent;border-image:linear-gradient(90deg,transparent,var(--border) 24px,var(--border) calc(100% - 24px),transparent) 1}
+  .section{padding-bottom:88px}
+  .sec-head{padding:56px 0 32px}
+  .contact-card{padding:26px}
+}
+@media (max-width:600px){
+  .hnav a{display:none}
+  .container{padding:0 20px}
+  .rule{background:linear-gradient(90deg,transparent,var(--border) 24px,var(--border) calc(100% - 24px),transparent)}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container header-in">
+    <a class="brand" href="#">
+      <span class="mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 14.5h4.3L10 5l4.5 13.5L17 11h4.5"></path></svg>
+      </span>
+      Electronic Supply International
+    </a>
+    <nav class="hnav" aria-label="Site">
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"></path></svg>
+        <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <p class="kicker">Software tools &amp; games</p>
+      <h1>Software should be something you <em>own.</em></h1>
+      <p class="tagline">That's what we build toward — tools and games for Windows, Android, and PC storefronts. Pay once, keep it.</p>
+      <div class="cta">
+        <a class="btn" href="#products">View products</a>
+        <a class="btn btn-ghost" href="#contact">Contact</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="principles" aria-label="What we build toward">
+    <div class="container">
+      <p class="kicker">What we build toward</p>
+      <div class="pstrip">
+        <div class="pitem">
+          <span class="picon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"></path><path d="M4 7.5 12 12l8-4.5M12 12v9"></path></svg></span>
+          <div>
+            <h3>Pay once</h3>
+            <p>Software should be a purchase, not a rental.</p>
+          </div>
+        </div>
+        <div class="pitem">
+          <span class="picon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="18" height="7" rx="2"></rect><path d="M5.5 12 8 5h8l2.5 7"></path><path d="M7 15.5h.01M10.5 15.5h.01"></path></svg></span>
+          <div>
+            <h3>Offline-first</h3>
+            <p>Your machine should be enough. We build for local, not for our servers.</p>
+          </div>
+        </div>
+        <div class="pitem">
+          <span class="picon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.1-7 10-4-1.9-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4.5"></path></svg></span>
+          <div>
+            <h3>No junk</h3>
+            <p>Ads and data harvesting have no place in software you paid for.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="products">
+    <div class="container">
+      <div class="rule"></div>
+      <div class="sec-head"><p class="kicker">Products</p><h2>Products</h2></div>
+      <div class="grid">
+        <article class="card card-featured">
+          <div class="cf-main">
+            <span class="cicon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.6L3 17.6V21h3.4l5.7-5.7a4.5 4.5 0 0 0 5.6-6l-3 3-2.4-.6-.6-2.4z"></path></svg></span>
+            <p class="card-kicker">Windows app</p>
+            <h3>Tech Guru Suite</h3>
+            <p>A lightweight, offline-first utility toolkit for Windows — recovery, imaging, encryption, and everyday file work in one place.</p>
+            <span class="badge">Coming to Microsoft Store</span>
+          </div>
+          <div class="twall">
+            <p class="twall-head">40 tools. One suite.</p>
+            <ul class="twall-grid">
+              <li>File recovery</li>
+              <li>Disk imaging</li>
+              <li>Secure wipe</li>
+              <li>ChaCha20 vault</li>
+              <li>Key finder</li>
+              <li>PDF kit</li>
+              <li>Media tools</li>
+              <li>Drive merge</li>
+            </ul>
+            <p class="twall-more">+ 32 more in the suite</p>
+          </div>
+        </article>
+        <article class="card">
+          <span class="cicon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.5"></circle><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"></path></svg></span>
+          <p class="card-kicker">PC game</p>
+          <h3>G.O.A.T. Aim Trainer</h3>
+          <p>A clean, fast aim trainer.</p>
+          <ul class="feat">
+            <li>True 1:1 sensitivity</li>
+            <li>Themeable arenas</li>
+            <li>Rank ladder from Lamb to G.O.A.T.</li>
+          </ul>
+          <p>No battle pass, no ads — you own it.</p>
+          <span class="badge">Coming to Steam</span>
+        </article>
+        <article class="card card-lab">
+          <span class="cicon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4M12 3v6.5M9.5 3v6.8L4.7 18a2 2 0 0 0 1.8 3h11a2 2 0 0 0 1.8-3l-4.8-8.2V3"></path><path d="M7 15.5h10"></path></svg></span>
+          <p class="card-kicker">Pipeline</p>
+          <h3>More in the lab</h3>
+          <p>Small, focused tools and games ship when they're ready.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band" id="about">
+    <div class="container">
+      <div class="rule"></div>
+      <div class="sec-head"><p class="kicker">About</p><h2>Why we build</h2></div>
+      <p class="about-lede">Software used to be simple: you bought it, and it was yours. We think that deal was worth keeping. So we design tools and games that are paid for once, run locally, and respect the person using them.</p>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="rule"></div>
+      <div class="sec-head"><p class="kicker">Contact</p><h2>Contact</h2></div>
+      <div class="contact-card">
+        <div>
+          <p class="c-name">Electronic Supply International LLC</p>
+          <p class="c-purpose"><span>Support</span><span>Business inquiries</span><span>Press</span></p>
+          <p class="c-note">We read everything; replies typically within a few business days.</p>
+        </div>
+        <div class="c-right">
+          <a class="btn btn-mail" href="mailto:dev@electronicsupplyinternational.com">dev@electronicsupplyinternational.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="rule"></div>
+  <div class="container">© 2026 Electronic Supply International LLC</div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('theme-toggle');
+  var mq=window.matchMedia('(prefers-color-scheme: light)');
+  function effective(){return root.dataset.theme||(mq.matches?'light':'dark');}
+  function label(){btn.setAttribute('aria-label',effective()==='dark'?'Switch to light theme':'Switch to dark theme');}
+  btn.addEventListener('click',function(){
+    var next=effective()==='dark'?'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem('esi-theme',next);}catch(e){}
+    label();
+  });
+  if(mq.addEventListener)mq.addEventListener('change',label);
+  label();
+})();
+</script>
+
+</body>
+</html>
